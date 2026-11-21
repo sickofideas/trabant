@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trabant 601 — Interaktivní 3D cesta po zaprášené silnici</title>
+  <meta name="description" content="Fotorealistický interaktivní 3D průlet kolem jedoucího Trabantu 601 po zaprášené okresní silnici. Rolováním kolečka objevte historii, dvoutaktní motor, duroplastovou karoserii i interaktivní rozpad dílů." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- Nacitaci obrazovka -->
+  <div id="loader-overlay" class="loader-overlay" aria-live="polite">
+    <div class="loader-card">
+      <div class="loader-badge">VEB SACHSENRING ZWICKAU • 1964–1990</div>
+      <h1 class="loader-title">TRABANT 601</h1>
+      <p id="loader-status" class="loader-status">Startuji dvoutakt a načítám 3D scénu…</p>
+      <div class="loader-bar-track">
+        <div id="loader-bar" class="loader-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixni 3D WebGL platno -->
+  <div id="canvas-wrap" class="canvas-wrap">
+    <canvas id="webgl-canvas"></canvas>
+  </div>
+
+  <!-- 3D Hotspot popisky nad Trabantem -->
+  <div id="hotspots-layer" class="hotspots-layer" aria-hidden="true"></div>
+
+  <!-- Tooltip pri najeti mysi na dil vozu -->
+  <div id="part-tooltip" class="part-tooltip is-hidden" role="status" aria-hidden="true"></div>
+
+  <!-- Horni lista HUD -->
+  <header id="hud-top" class="hud-top">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <div>
+        <div class="brand-title">TRABANT 601</div>
+        <div class="brand-sub">Zaprášená okreska • 3D průlet</div>
+      </div>
+    </div>
+
+    <div class="hud-controls">
+      <!-- Rychlomer / prepinac rychlosti -->
+      <div class="speed-group" role="group" aria-label="Rychlost jízdy">
+        <span class="speed-label">JÍZDA</span>
+        <button class="speed-btn" data-speed="0" title="Zastavit na krajnici (Mezerník)">0</button>
+        <button class="speed-btn" data-speed="30" title="Výletní tempo 30 km/h">30</button>
+        <button class="speed-btn is-active" data-speed="50" title="Okreska 50 km/h">50</button>
+        <button class="speed-btn" data-speed="80" title="Plný plyn 80 km/h">80</button>
+        <span class="speed-unit">km/h</span>
+      </div>
+
+      <button id="btn-terrain" class="hud-btn" type="button" aria-pressed="false" title="Přepnout mezi hladkou okreskou a rozbitou polňačkou (listová pera v akci)">
+        <span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15c3-4 6 4 9 0s6 4 11 0"/></svg></span>
+        <span id="terrain-label">Okreska</span>
+      </button>
+
+      <button id="btn-orbit" class="hud-btn" type="button" aria-pressed="false" title="Volný 3D pohled myší (klávesa O)">
+        <span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="9" ry="4"/><line x1="12" y1="3" x2="12" y2="21"/></svg></span>
+        <span>Volný pohled</span>
+      </button>
+
+      <button id="btn-photo" class="hud-btn" type="button" aria-pressed="false" title="Režim čisté 3D fotky s exportem PNG">
+        <span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/></svg></span>
+        <span>Fotorežim</span>
+      </button>
+
+      <button id="btn-audio" class="hud-btn" type="button" aria-pressed="false" title="Zapnout nebo vypnout zvuk větru a dvoutaktu">
+        <span class="btn-icon" id="audio-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg></span>
+        <span id="audio-label">Zvuk</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Dilna: barva laku, expedicni vybava, kapota a manualni rozpad -->
+  <section id="workshop-bar" class="workshop-bar" aria-label="Úprava vozu a technický rozpad">
+    <button id="btn-workshop-toggle" class="workshop-mobile-toggle" type="button" aria-expanded="false">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Dílna
+    </button>
+    <div id="workshop-content" class="workshop-content">
+      <div class="workshop-group" role="group" aria-label="Barva karoserie">
+        <span class="workshop-label">Lak</span>
+        <div id="paint-swatches" class="paint-swatches"></div>
+      </div>
+
+      <div class="workshop-divider"></div>
+
+      <button id="btn-bonnet" class="workshop-btn" type="button" aria-pressed="false" title="Vyklopit nebo zavřít přední kapotu (klávesa H)">
+        <span>Kapota</span>
+      </button>
+
+      <button id="btn-wipers" class="workshop-btn" type="button" aria-pressed="false" title="Zapnout nebo vypnout stěrače čelního skla (klávesa W)">
+        <span>Stěrače</span>
+      </button>
+
+      <button id="btn-expedition" class="workshop-btn" type="button" aria-pressed="false" title="Přidat expediční střešní zahrádku, rezervu, kanystry a mlhovky">
+        <span>Expedice</span>
+      </button>
+
+      <div class="workshop-divider"></div>
+
+      <label class="explode-control" for="explode-slider" title="Ruční rozpad vozidla na jednotlivé díly">
+        <span class="workshop-label">Rozpad</span>
+        <input id="explode-slider" class="explode-slider" type="range" min="0" max="100" value="0" />
+        <span id="explode-value" class="explode-value">0 %</span>
+      </label>
+    </div>
+  </section>
+
+  <!-- Lista pro rezim Cista 3D fotka -->
+  <div id="photo-toolbar" class="photo-toolbar is-hidden">
+    <button id="btn-atmosphere" class="photo-btn" type="button" title="Přepnout denní dobu a světelnou atmosféru">
+      <span class="btn-icon" id="atmosphere-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px" aria-hidden="true"><path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="9" x2="12" y2="2"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/></svg></span><span id="atmosphere-label">Zlatá hodinka</span>
+    </button>
+    <button id="btn-snapshot" class="photo-btn photo-btn-accent" type="button" title="Stáhnout aktuální 3D snímek jako PNG">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Uložit PNG
+    </button>
+    <button id="btn-exit-photo" class="photo-btn" type="button">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="vertical-align:-1.5px;margin-right:4px" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Zpět k popiskům
+    </button>
+  </div>
+
+  <!-- Bocni navigace kapitol -->
+  <nav id="chapter-nav" class="chapter-nav" aria-label="Kapitoly průletu"></nav>
+
+  <!-- Aktivni informacni karta (synchronizovana se scrollem) -->
+  <aside id="chapter-card" class="chapter-card" aria-live="polite">
+    <div class="card-header-row">
+      <div id="card-badge" class="card-badge">01 / STVOŘEN DO NEČASŮ</div>
+      <div class="card-actions">
+        <button id="btn-prev-chapter" class="card-icon-btn" type="button" title="Předchozí kapitola (↑)">‹</button>
+        <button id="btn-next-chapter" class="card-icon-btn" type="button" title="Další kapitola (↓)">›</button>
+        <button id="btn-card-minimize" class="card-icon-btn" type="button" title="Sbalit nebo rozbalit kartu">−</button>
+      </div>
+    </div>
+    <h2 id="card-title" class="card-title">Trabant 601</h2>
+    <div class="card-collapsible">
+      <p id="card-subtitle" class="card-subtitle">Symbol jedné éry v oblaku prachu</p>
+      <p id="card-text" class="card-text"></p>
+      <div id="card-specs" class="card-specs"></div>
+      <div class="card-footer-cta">
+        <span class="card-inspect-hint">Tip: Klikni na libovolný díl 3D modelu pro detail</span>
+        <button id="btn-start-tour" class="card-cta-btn" type="button">Další pohled →</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Inspektor vybraneho dilu (zobrazi se po kliknuti na dil v 3D) -->
+  <aside id="part-inspector" class="part-inspector is-hidden" aria-live="polite">
+    <div class="part-inspector-head">
+      <span id="part-group" class="part-group">M 02 / MOTOR P 65</span>
+      <button id="btn-close-part" class="card-icon-btn" type="button" aria-label="Zavřít detail dílu">✕</button>
+    </div>
+    <h3 id="part-title" class="part-title">Dvouválec P 65</h3>
+    <div id="part-material" class="part-material">Šedá litina + hliník</div>
+    <p id="part-fact" class="part-fact"></p>
+  </aside>
+
+  <!-- Spodni napoveda ovladani + info o stavu modelu -->
+  <footer id="hud-bottom" class="hud-bottom">
+    <div id="control-hint" class="control-hint">
+      Roluj kolečkem myši nebo použij šipky ↑/↓ • Klikni na díl pro detail
+    </div>
+    <div class="hud-bottom-right">
+      <div id="placeholder-pill" class="placeholder-pill is-hidden">
+        Siluetový placeholder • vlastní model vlož do <code>assets_raw/</code>
+      </div>
+      <div class="scroll-progress-wrap" aria-hidden="true">
+        <div id="scroll-progress-bar" class="scroll-progress-bar"></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll track sekce (generovane z config/scene_config.json pro GSAP ScrollTrigger) -->
+  <main id="scroll-track" class="scroll-track" aria-hidden="true"></main>
+
+  <!-- GSAP, ScrollTrigger a Lenis z jsDelivr -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

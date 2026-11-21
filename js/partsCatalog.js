@@ -1,0 +1,258 @@
+/**
+ * Katalog konstrukcních celku Trabant 601 (ETK 1980) pro interaktivni inspekci v 3D rozpadu.
+ */
+const PART_RULES = [
+  {
+    match: ['Exp_RoofRack'],
+    group: 'EXPEDICE / DOPLNKY',
+    title: 'Expediční střešní zahrádka',
+    material: 'Ocelová trubka + jasanové latě',
+    fact: 'Nosnost střechy Trabantu je překvapivě vysoká — s rozloženou zátěží na okapnicích bez problému uveze rezervu, kanystry i střešní stan.',
+  },
+  {
+    match: ['Exp_SpareWheel'],
+    group: 'EXPEDICE / KOLA',
+    title: 'Střešní rezervní kolo 145 SR 13',
+    material: 'Ocelový ráfek + diagonální/radiální pneu',
+    fact: 'Na expedicích v Africe a Jižní Americe uvolnilo přesunutí rezervy na střechu drahocenné místo v kufru pro náhradní poloosy a nástroje.',
+  },
+  {
+    match: ['Exp_Jerrycan'],
+    group: 'EXPEDICE / PALIVO',
+    title: 'Kovové kanystry s olejem M2T a benzínem',
+    material: 'Lisovaný ocelový plech (20 l)',
+    fact: 'Dojezd na sériovou 26l nádrž je kolem 350 km — přídavné kanystry na střeše jsou v poušti i na Pamíru nutností.',
+  },
+  {
+    match: ['Exp_CargoBox'],
+    group: 'EXPEDICE / VÝBAVA',
+    title: 'Expediční bedna s nářadím',
+    material: 'Hliníkový box / voděodolné těsnění',
+    fact: 'Kompletní sada náhradních dílů pro generálku Trabantu se vejde do jediné malé bedny — stačí klíče 10, 13, 17, 19 a stahovák.',
+  },
+  {
+    match: ['Exp_FogLight'],
+    group: 'EXPEDICE / OSVĚTLENÍ',
+    title: 'Přídavné dálkové / mlhové světlomety',
+    material: 'Pochromovaná parabola + žluté sklo',
+    fact: 'Při přestavbě na 12V alternátor zvládne elektrická soustava i přídavné světlomety pro noční přejezdy mimo silnice.',
+  },
+  {
+    match: ['K13_Duroplast_Roof', 'K13_Roof_'],
+    group: 'K 13 / KAROSERIE',
+    title: 'Klenutá střecha z duroplastu',
+    material: 'Duroplast (fenolová pryskyřice + bavlna)',
+    fact: 'Výlisek o tloušťce cca 2,5 mm lepený a nýtovaný k ocelovému rámu. Odolává krupobití i korozi a je překvapivě pevný v krutu.',
+  },
+  {
+    match: ['K13_Duroplast_Bonnet', 'K13_Bonnet_', 'K13_Sachsenring_Badge', 'Rivet_Bonnet_'],
+    group: 'K 13 / KAROSERIE',
+    title: 'Přední kapota motoru + znak Sachsenring',
+    material: 'Duroplast + ocelové výztuhy',
+    fact: 'Váží jen několik kilogramů. Otevírá se od přídě směrem nahoru k čelnímu sklu a dává okamžitý přístup k motoru, nádrži i baterii.',
+  },
+  {
+    match: ['K13_Duroplast_TrunkLid', 'TrunkHinge'],
+    group: 'K 13 / KAROSERIE',
+    title: 'Víko zavazadlového prostoru (415 l)',
+    material: 'Duroplastový výlisek',
+    fact: 'Limousine nabídla v délce 3,55 m nečekaně velký kufr o objemu 415 litrů — víc než řada soudobých vozů vyšší třídy.',
+  },
+  {
+    match: ['K13_Duroplast_Fender_F', 'Rivet_FrontFender_'],
+    group: 'K 13 / DUROPLAST',
+    title: 'Přední duroplastový blatník',
+    material: 'Fenolformaldehydová pryskyřice s bavlnou',
+    fact: 'Při lehkém nárazu nebo kontaktu s kamenem se panel pružně prohne a vrátí do původního tvaru bez promáčkliny a oprýskaného laku.',
+  },
+  {
+    match: ['K13_Duroplast_Fender_R', 'C_Vent_'],
+    group: 'K 13 / DUROPLAST',
+    title: 'Zadní duroplastový blatník',
+    material: 'Duroplast',
+    fact: 'Vyměnitelný kus po kuse po odvrtání nýtů a odšroubování spodní lišty. Na rozdíl od ocelového plechu nikdy neprorezne.',
+  },
+  {
+    match: ['K17_Duroplast_Door', 'K17_SideTrim', 'Door_Handle'],
+    group: 'K 17 / DVEŘE',
+    title: 'Dveře s duroplastovým pláštěm',
+    material: 'Ocelový rám + duroplastový potah',
+    fact: 'Lehké dveře s jednoduchou mechanikou stahování oken a hliníkovou okrasnou lištou po celé délce boku.',
+  },
+  {
+    match: ['K13_Front_Fascia', 'Attrappe', 'Grille', 'Plate_Front'],
+    group: 'K 13 / PŘÍĎ',
+    title: 'Přední čelo a maska chladiče',
+    material: 'Ocelový výlisek + tahokov',
+    fact: 'Rozměrná přední maska přivádí vzduch přímo k axiálnímu ventilátoru chlazení a pod kapotu k nasávání.',
+  },
+  {
+    match: ['Bumper_', 'Stossecke'],
+    group: 'K 13 / NÁRAZNÍKY',
+    title: 'Profilovaný nárazník s plastovými rohy',
+    material: 'Lakovaný ocelový profil + plast',
+    fact: 'Jednoduchý nárazník uchycený na dvou konzolách chrání přední i zadní čelo v terénu i městském provozu.',
+  },
+  {
+    match: ['Headlight', 'Blinker', 'Taillight', 'License_Light'],
+    group: 'E / OSVĚTLENÍ',
+    title: 'Světlomety s Fresnelovým sklem',
+    material: 'Sklo + kovová parabola',
+    fact: 'Legendární kulaté přední světlomety dávají Trabantu nezaměnitelný „pohled“ a žárovky vyměníte bez nářadí.',
+  },
+  {
+    match: ['Windshield', 'RearWindow', 'DoorGlass', 'QuarterGlass', 'Wiper', 'Mirror'],
+    group: 'K 25 / ZASKLENÍ',
+    title: 'Bezpečnostní skla ESG v gumovém těsnění',
+    material: 'Tvrzené sklo ESG + pryžový profil',
+    fact: 'Skla nejsou lepená do karoserie — drží v pružné gumě, takže je v případě poškození vyměníte na cestě pomocí obyčejného provázku.',
+  },
+  {
+    match: ['K11_', 'K01_', 'K07_', 'Pillar_'],
+    group: 'K 11 / SKELET',
+    title: 'Ocelový samonosný skelet a podlaha',
+    material: 'Hlubokotažný ocelový plech + Ubotex 85',
+    fact: 'Kostra vozu zvaná „Gerippe“ nese všech 9 duroplastových panelů. Hladká zakrytá podlaha funguje v hlubokém sněhu a blátě jako sáně.',
+  },
+  {
+    match: ['K45_DoorCard', 'K45_DoorArmrest', 'K45_WindowCrank'],
+    group: 'K 45 / INTERIÉR DVEŘÍ',
+    title: 'Čalounění dveří s mechanickou klikou okna',
+    material: 'Lisovaný sololit + koženka + chrom',
+    fact: 'Jednoduché dveřní výplně v koňakové kožence s madlem a klasickou stahovací kličkou bez jediného elektromotoru.',
+  },
+  {
+    match: ['K41_Seatbelt'],
+    group: 'K 41 / BEZPEČNOST',
+    title: 'Tříbodový bezpečnostní pás',
+    material: 'Tkaný popruh + ocelová spona',
+    fact: 'Od konce 70. let standardně montované tříbodové pásy ukotvené v ocelovém B-sloupku skeletu.',
+  },
+  {
+    match: ['K29_Headliner', 'K29_SunVisor'],
+    group: 'K 29 / KABINA',
+    title: 'Stropnice a sluneční clony',
+    material: 'Světlá perforovaná koženka',
+    fact: 'Světlé čalounění stropu opticky zvětšuje kabinu a dvojice sklopných clon chrání posádku proti nízkému slunci.',
+  },
+  {
+    match: ['K29_Radio'],
+    group: 'K 29 / PALUBNÍ DESKA',
+    title: 'Dobové autorádio RFT / Tesla',
+    material: 'Hliníkový čelní panel + bakelit',
+    fact: 'Příplatkové východoněmecké autorádio RFT Greifenstein nebo československá Tesla pro poslech na dlouhých cestách.',
+  },
+  {
+    match: ['K41_', 'Dashboard', 'Tacho', 'Steering', 'Shift_', 'Handbrake', 'Inner_Mirror', 'Glovebox', 'UnderDash', 'Pedal'],
+    group: 'K 41 / INTERIÉR',
+    title: 'Dvoutónová sedadla a palubní deska',
+    material: 'Koženka, pruhovaný textil, ocel a bakelit',
+    fact: 'Charakteristická řadicí páka pod volantem („deštník“), kulatý tachometr 0–120 km/h, odkládací polička pod palubkou a pohodlná dvoutónová sedadla.',
+  },
+  {
+    match: ['M02_', 'M07_'],
+    group: 'M 02 / MOTOR P 65',
+    title: 'Vzduchem chlazený dvouválec P 65 (594,5 cm³)',
+    material: 'Šedá litina + hliníkové hlavy válců',
+    fact: 'Pouze 5 hlavních pohyblivých částí (klika, 2 ojnice, 2 písty). Žádné ventily, žádné rozvody, žádné olejové čerpadlo — nemá se co zadřít v mrazu.',
+  },
+  {
+    match: ['M12_', 'M16_', 'M18_'],
+    group: 'M 12–18 / CHLAZENÍ A SÁNÍ',
+    title: 'Axiální ventilátor chlazení a karburátor BVF 28 HB',
+    material: 'Hliníková slitina + plechové vedení vzduchu',
+    fact: 'Ventilátor poháněný klínovým řemenem ofukuje žebrované válce i v prudkém stoupání, takže se motor neuvaří ani v letních kolonách.',
+  },
+  {
+    match: ['G02_'],
+    group: 'G 02 / PŘEVODOVKA G 50 S',
+    title: '4stupňová převodovka s volnoběžkou na 4. stupni',
+    material: 'Tlakově litý hliník',
+    fact: 'Volnoběžka na čtyřce chrání dvoutaktní motor před nedostatečným mazáním při jízdě z kopce bez plynu a snižuje spotřebu.',
+  },
+  {
+    match: ['F51_Fuel'],
+    group: 'F 51 / PALIVOVÁ SOUSTAVA',
+    title: 'Spádová palivová nádrž 26 l nad motorem',
+    material: 'Ocelový plech + pryžová hadička',
+    fact: 'Palivo teče do karburátoru čistě gravitací — nepotřebuje palivové čerpadlo. Součástí kohoutu je mechanická rezerva na poslední 4 litry.',
+  },
+  {
+    match: ['E01_', 'E05_', 'E24_', 'E28_'],
+    group: 'E / ELEKTRIKA 6V/12V',
+    title: 'Jednoduché zapalování, dynamo a akumulátor',
+    material: 'Měď, zinek, plastový obal',
+    fact: 'Nulová řídicí elektronika: každý válec má vlastní kladívko a zapalovací cívku. Opravitelné kouskem brusného papíru u krajnice.',
+  },
+  {
+    match: ['F36_', 'F45_'],
+    group: 'F 36 / BRZDY',
+    title: 'Dvouokruhový brzdový systém',
+    material: 'Litina + ocelové trubky Ø 4,75 mm',
+    fact: 'Bubnové brzdy Ø 200 mm se dvěma oddělenými hydraulickými okruhy zaručují bezpečné zastavení i při poruše jednoho okruhu.',
+  },
+  {
+    match: ['F55_', 'K58_'],
+    group: 'F 55 / VÝFUK A TOPENÍ',
+    title: 'Výfuková soustava s výměníkem topení',
+    material: 'Litina + ocelový plech + kopexová hadice',
+    fact: 'Čerstvý vzduch ohřátý od prvního tlumiče výfuku proudí do kabiny hliníkovou hadicí K 58 — jednoduché a okamžité topení.',
+  },
+  {
+    match: ['K13_Mudflap'],
+    group: 'K 13 / KAROSERIE',
+    title: 'Zadní pryžové zástěrky (lapače nečistot)',
+    material: 'Pružná guma',
+    fact: 'Chrání zadní čelo i za ním jedoucí vozy před odletujícím štěrkem a prachem na nezpevněných cestách.',
+  },
+  {
+    match: ['K07_Rear_Badge601'],
+    group: 'K 07 / OZNAČENÍ',
+    title: 'Chromovaný nápis Trabant 601',
+    material: 'Eloxovaný hliník / chrom',
+    fact: 'Typové označení na zadním čele. Písmeno S nebo L označovalo stupeň výbavy (Standard / Sonderwunsch / de Luxe).',
+  },
+  {
+    match: ['Wheel_'],
+    group: 'F / KOLA 4J × 13',
+    title: 'Kolo 145 SR 13 s brzdovým bubnem a pokličkou',
+    material: 'Ocelový ráfek ET+35 + pryžová pneu',
+    fact: 'Úzké pneumatiky se v blátě a sněhu snadno proříznou až na pevný podklad místo toho, aby vůz plaval po povrchu.',
+  },
+  {
+    match: ['F04_', 'Damper_', 'ControlArm_', 'HalfShaft_', 'BootInner_', 'F01_', 'F07_'],
+    group: 'F 01–07 / PODVOZEK',
+    title: 'Pomocný rám, listová pera a teleskopické tlumiče',
+    material: 'Pružinová ocel + litina',
+    fact: 'Nezávislé zavěšení všech kol s příčnými listovými pružinami mění odklon podle zatížení a bez problému přežije i rozbité polní cesty.',
+  },
+  {
+    match: ['Bolt_', 'Nut_', 'Rivet_'],
+    group: 'TGL 1980 / NORMÁLIE',
+    title: 'Spojovací materiál TGL (SW 10–19)',
+    material: 'Pozinkovaná ocel',
+    fact: 'Celé auto drží pohromadě standardizovanými metrickými šrouby a maticemi — v terénu je nahradíte běžným spojovacím materiálem.',
+  },
+];
+
+export function describeTrabantPart(meshName) {
+  const n = meshName || '';
+  for (const rule of PART_RULES) {
+    if (rule.match.some((prefix) => n.includes(prefix))) {
+      return {
+        id: n,
+        group: rule.group,
+        title: rule.title,
+        material: rule.material,
+        fact: rule.fact,
+      };
+    }
+  }
+  return {
+    id: n,
+    group: 'TRABANT 601 L/LO',
+    title: n.replace(/_/g, ' ') || 'Konstrukční díl',
+    material: 'Ocel / Duroplast',
+    fact: 'Originální konstrukční prvek vozu Trabant 601 (VEB Sachsenring Zwickau, 1980).',
+  };
+}
