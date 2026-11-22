@@ -17,3 +17,9 @@ Fotorealistický interaktivní 3D web vytvořený v pipeline **Blender 5.3.0 (GP
 ## Lokální spuštění a publikace na GitHub Pages
 - **Lokální náhled:** spusť `spustit_lokalni_server.bat` (otevře `http://localhost:8000/`).
 - **Publikace na GitHub Pages:** spusť `pripravit_slozku_pro_github.bat` (případně se spustí automaticky po buildu 3D modelů) a obsah složky `github_upload/` přetáhni přímo na GitHub (*Add file → Upload files* a zapni *Settings → Pages → `main` / `/ (root)`*).
+
+## Hybridní režim: Filmové Cycles / WebP scroll-video + interaktivní 3D
+Web podporuje kombinaci **předrenderované WebP sekvence na `<canvas>`** (kapitoly 01–06 s progresivním načítáním a stabilními 60 FPS) a **živé Three.js scény** (kapitoly 07–08: rýsovací papír, kompletní rozpad dílů ETK 1980, dílna, lak a volný pohled).
+- **Vyrenderovat z Blender Cycles + FFmpeg:** spusť `vygeneruj_scroll_video.bat` (pro rychlý náhled `vygeneruj_scroll_video.bat -Preview`).
+- **Převést vlastní / AI MP4 video (Veo, Flow):** přetáhni `.mp4` soubor na `prevest_mp4_na_webp.bat` (nebo ho vlož do `assets_raw/` a spusť `.bat`).
+- Dokud nejsou snímky v `assets/frames_desktop/` vygenerované, web automaticky běží v čistém 3D režimu bez chyby. Přepínat mezi režimy lze kdykoli tlačítkem v horní liště nebo klávesou `V`.

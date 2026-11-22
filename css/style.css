@@ -45,6 +45,35 @@ html, body {
   width: 100%;
   height: 100%;
   touch-action: pan-y;
+  transition: opacity 0.45s ease;
+}
+
+.sequence-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+  z-index: 2;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.sequence-canvas.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+body.is-film-mode #webgl-canvas {
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.is-film-mode .hotspots-layer {
+  opacity: 0;
+  pointer-events: none;
 }
 
 body.is-orbit-mode #webgl-canvas {
@@ -930,6 +959,33 @@ body.is-blueprint-mode .card-cta-btn {
   color: #fff2dc;
 }
 
+.film-status-pill {
+  pointer-events: auto;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: #f6efe2;
+  padding: 5px 11px;
+  border-radius: var(--radius-pill);
+  background: rgba(18, 15, 11, 0.72);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+
+.film-status-pill.is-hidden {
+  display: none;
+}
+
+.hud-btn-mode.is-film-active {
+  background: rgba(233, 140, 58, 0.22);
+  border-color: var(--accent);
+  color: #ffd9b3;
+}
+
+.hud-btn-mode.is-waiting {
+  opacity: 0.78;
+}
+
 .scroll-progress-wrap {
   width: 110px;
   height: 4px;
@@ -1073,7 +1129,8 @@ body.is-blueprint-mode .card-cta-btn {
   .scroll-progress-wrap {
     width: 72px;
   }
-  .placeholder-pill {
+  .placeholder-pill,
+  .film-status-pill {
     display: none;
   }
   .hotspot-short {

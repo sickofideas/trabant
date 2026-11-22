@@ -34,6 +34,9 @@ export class UIController {
     this.btnStartTour = document.getElementById('btn-start-tour');
     this.btnCardMinimize = document.getElementById('btn-card-minimize');
 
+    this.btnViewMode = document.getElementById('btn-view-mode');
+    this.viewModeLabel = document.getElementById('view-mode-label');
+    this.filmStatusPill = document.getElementById('film-status-pill');
     this.btnTerrain = document.getElementById('btn-terrain');
     this.terrainLabel = document.getElementById('terrain-label');
     this.btnOrbit = document.getElementById('btn-orbit');
@@ -77,6 +80,8 @@ export class UIController {
     this._wipersOn = false;
     this._expeditionOn = false;
     this._terrainRough = false;
+    this._filmModeActive = false;
+    this._framesAvailable = false;
     this._lastHoverTime = 0;
     this._lastSpeedBeforePause = config.driving?.defaultSpeedKmh ?? 50;
 
@@ -149,6 +154,12 @@ export class UIController {
   }
 
   _bindControls() {
+    if (this.btnViewMode) {
+      this.btnViewMode.addEventListener('click', () => {
+        this.cb.onToggleViewMode?.();
+      });
+    }
+
     document.querySelectorAll('.speed-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
         const spd = Number(btn.dataset.speed);
@@ -365,6 +376,8 @@ export class UIController {
         this.btnBonnet.click();
       } else if (e.code === 'KeyW' && this.btnWipers) {
         this.btnWipers.click();
+      } else if (e.code === 'KeyV') {
+        this.cb.onToggleViewMode?.();
       } else if (e.code === 'Escape' && document.body.classList.contains('is-photo-mode')) {
         this.setPhotoMode(false);
       }
@@ -416,6 +429,9 @@ export class UIController {
   }
 
   setPhotoMode(enabled) {
+    if (enabled && this._filmModeActive) {
+      this.cb.onForce3DMode?.();
+    }
     document.body.classList.toggle('is-photo-mode', enabled);
     if (this.btnPhoto) {
       this.btnPhoto.classList.toggle('is-active', enabled);
@@ -429,9 +445,61 @@ export class UIController {
     }
   }
 
+  setViewModeState({ filmActive, framesAvailable, manualMode, loading3D, frameInfo }) {
+    this._filmModeActive = Boolean(filmActive);
+    this._framesAvailable = Boolean(framesAvailable);
+    document.body.classList.toggle('is-film-mode', this._filmModeActive);
+
+    if (this.btnViewMode) {
+      this.btnViewMode.classList.toggle('is-film-active', this._filmModeActive);
+      this.btnViewMode.classList.toggle('is-waiting', !this._framesAvailable);
+      this.btnViewMode.setAttribute('aria-pressed', String(this._filmModeActive));
+      if (!this._framesAvailable) {
+        this.btnViewMode.title = 'Filmová WebP sekvence zatím není vyrenderovaná — spusť vygeneruj_scroll_video.bat nebo prevest_mp4_na_webp.bat';
+      } else if (manualMode === '3d') {
+        this.btnViewMode.title = 'Vrátit do hybridního filmového režimu (klávesa V)';
+      } else {
+        this.btnViewMode.title = 'Přepnout mezi filmovým Cycles videem a interaktivním 3D (klávesa V)';
+      }
+    }
+
+    if (this.viewModeLabel) {
+      if (loading3D) {
+        this.viewModeLabel.textContent = 'Načítám 3D…';
+      } else if (!this._framesAvailable) {
+        this.viewModeLabel.textContent = '3D (bez filmu)';
+      } else if (this._filmModeActive) {
+        this.viewModeLabel.textContent = 'Cycles Film';
+      } else {
+        this.viewModeLabel.textContent = '3D Dílna';
+      }
+    }
+
+    this.updateFilmPill(frameInfo);
+    this._updateHintText(document.body.classList.contains('is-orbit-mode'));
+  }
+
+  updateFilmPill(frameInfo) {
+    if (!this.filmStatusPill) return;
+    if (!this._framesAvailable || !this._filmModeActive || !frameInfo) {
+      this.filmStatusPill.classList.add('is-hidden');
+      return;
+    }
+    const { currentFrame, loadedCount, totalFrames } = frameInfo;
+    const pct = Math.round((loadedCount / Math.max(1, totalFrames)) * 100);
+    this.filmStatusPill.textContent = pct < 100
+      ? `Cycles WebP • ${currentFrame}/${totalFrames} (cache ${pct} %)`
+      : `Cycles WebP • snímek ${currentFrame}/${totalFrames}`;
+    this.filmStatusPill.classList.remove('is-hidden');
+  }
+
   _updateHintText(orbit) {
     if (!this.hintEl) return;
-    if (orbit) {
+    if (this._filmModeActive && !orbit) {
+      this.hintEl.textContent = this.isTouch
+        ? 'Filmový scroll (Cycles 60 FPS) • v 7. kapitole nebo v Dílně se zapne 3D'
+        : 'Roluj pro filmový Cycles průlet • v 7. kapitole nebo klikem na Dílnu přejdeš do 3D';
+    } else if (orbit) {
       this.hintEl.textContent = this.isTouch
         ? 'Volný pohled: táhni prstem pro otáčení • klepni na díl pro detail'
         : 'Volný pohled: táhni myší pro otáčení, kolečkem přibliž • klikni na díl pro detail';

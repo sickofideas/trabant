@@ -1,263 +1,471 @@
 {
-  "project": {
-    "title": "Trabant 601",
-    "subtitle": "Schopnosti a odolnost nezničitelného dvoutaktu",
-    "era": "1964–1990 • VEB Sachsenring Zwickau"
-  },
-  "trabant_import": {
-    "target_length_m": 3.555,
-    "rotation_z_deg": 0,
-    "wheel_radius_m": 0.2825,
-    "road_tile_length_m": 32.0,
-    "bake_road_ao": true,
-    "ao_samples": 32
-  },
-  "paints": [
-    { "id": "papyrus", "name": "Papyrusweiss", "hex": "#dfd7c3" },
-    { "id": "monsun", "name": "Monsungelb (Expedice)", "hex": "#e2a829" },
-    { "id": "gletscher", "name": "Gletscherblau", "hex": "#7ea8c2" },
-    { "id": "panama", "name": "Panamagrün", "hex": "#6c9969" }
-  ],
-  "assets": {
-    "trabantModel": "assets/models/trabant.glb",
-    "roadTileModel": "assets/models/road_tile.glb",
-    "manifest": "assets/models/manifest.json",
-    "hdri": "assets/hdri/golden_hour.hdr",
-    "lut": "assets/luts/warm_golden.cube",
-    "audio": "assets/audio/ambient_wind.wav",
-    "vfx": {
-      "smokePuff": "assets/vfx/smoke_puff.png",
-      "softMist": "assets/vfx/soft_mist.png",
-      "dustMote": "assets/vfx/dust_mote.png",
-      "lensFlare": "assets/vfx/lens_flare.png"
-    }
-  },
-  "lighting": {
-    "toneMappingExposure": 1.12,
-    "environmentIntensity": 1.10,
-    "backgroundBlurriness": 0.02,
-    "backgroundIntensity": 0.96,
-    "sun": {
-      "color": "#ffbe70",
-      "intensity": 4.4,
-      "position": [28, 5.2, 14],
-      "shadowFrustum": 11,
-      "shadowBias": -0.00025,
-      "shadowNormalBias": 0.016
-    },
-    "hemi": {
-      "skyColor": "#ffdcb0",
-      "groundColor": "#281d14",
-      "intensity": 0.24
-    },
-    "fog": {
-      "color": "#c49e72",
-      "density": 0.017
-    },
-    "bloom": {
-      "threshold": 1.08,
-      "strength": 0.22,
-      "radius": 0.36
-    },
-    "lut": {
-      "enabled": true,
-      "intensity": 0.42
-    }
-  },
-  "driving": {
-    "defaultSpeedKmh": 50,
-    "speedPresetsKmh": [0, 30, 50, 80],
-    "roadTileLength": 32.0,
-    "roadTileCount": 3,
-    "wheelRadius": 0.2825,
-    "exhaustTip": [-0.46, 0.21, -2.82],
-    "rearWheels": [
-      [-0.6275, 0.08, -2.02],
-      [0.6275, 0.08, -2.02]
-    ],
-    "frontWheels": [
-      [-0.603, 0.08, 0.0],
-      [0.603, 0.08, 0.0]
-    ]
-  },
-  "audio": {
-    "windVolume": 0.22,
-    "engineVolume": 0.14
-  },
-  "hotspots": [
-    {
-      "id": "engine",
-      "label": "Vzduchem chlazený P 65",
-      "short": "Neuvaří se ani nezamrzne",
-      "position": [0.15, 0.72, 0.12],
-      "chapterIndex": 1
-    },
-    {
-      "id": "duroplast",
-      "label": "Pružný Duroplast",
-      "short": "Nereziví • odolá kamenům",
-      "position": [0.76, 0.86, -1.05],
-      "chapterIndex": 2
-    },
-    {
-      "id": "chassis",
-      "label": "Listová pera & tlumiče",
-      "short": "Zdvih 75 mm • do každé koleje",
-      "position": [-0.74, 0.34, -0.02],
-      "chapterIndex": 3
-    },
-    {
-      "id": "exhaust",
-      "label": "Expediční kufr 415 l & výfuk",
-      "short": "Opravitelný u krajnice",
-      "position": [-0.15, 0.78, -2.35],
-      "chapterIndex": 4
-    }
-  ],
-  "chapters": [
-    {
-      "id": "intro",
-      "badge": "01 / STVOŘEN DO NEČASŮ",
-      "title": "615 kilo čisté odvahy",
-      "subtitle": "Kde těžké vozy zapadnou, Trabant projede",
-      "text": "Díky muší váze 615 kg a ploché zakryté podlaze dokáže Trabant 601 přejet hluboké polní koleje, bláto i sníh bez zaboření. A když přece jen uvízne, dva dospělí lidé jej z příkopu zvednou holýma rukama.",
-      "specs": [
-        { "k": "Hmotnost", "v": "615 kg" },
-        { "k": "Světlá výška", "v": "155 mm" },
-        { "k": "Poloměr otáčení", "v": "9,3 m" }
-      ],
-      "camera": {
-        "pos": [-2.42, 0.46, 2.95],
-        "target": [-0.08, 0.56, -0.85],
-        "fov": 32
-      },
-      "activeHotspot": null
-    },
-    {
-      "id": "engine",
-      "badge": "02 / DVOUTAKT BEZ KOMPROMISŮ",
-      "title": "Nezamrzne a neuvaří se",
-      "subtitle": "Vzduchem chlazený dvouválec 594,5 cm³",
-      "text": "Motor P 65 nemá chladič, vodní pumpu, ventily ani olejové čerpadlo — tedy žádné díly, které by v mrazu praskly nebo v poušti vyvřely. Palivo teče ze spádové 26l nádrže samospádem a maže motor směsí 1:50.",
-      "specs": [
-        { "k": "Výkon", "v": "19,1 kW (26 k)" },
-        { "k": "Chlazení", "v": "Vzduchem (ventilátor)" },
-        { "k": "Spolehlivost", "v": "-30 °C až +50 °C" }
-      ],
-      "camera": {
-        "pos": [0.95, 2.38, 1.55],
-        "target": [0.05, 0.44, 0.05],
-        "fov": 34
-      },
-      "activeHotspot": "engine"
-    },
-    {
-      "id": "duroplast",
-      "badge": "03 / NEZNIČITELNÝ DUROPLAST",
-      "title": "Karoserie, která nezná rez",
-      "subtitle": "Tepelně lisovaná pryskyřice a bavlna",
-      "text": "Devět vnějších panelů z duroplastu na ocelovém skeletu odolává posypové soli, vlhku i odletujícím kamenům na šotolině. Materiál je pružný — při lehkém nárazu se prohne a vrátí zpět, aniž by popraskal jako plech.",
-      "specs": [
-        { "k": "Panely", "v": "9× Duroplast" },
-        { "k": "Tloušťka", "v": "2,5 mm" },
-        { "k": "Koroze povrchu", "v": "0 %" }
-      ],
-      "camera": {
-        "pos": [4.35, 1.08, -1.05],
-        "target": [0.0, 0.68, -1.02],
-        "fov": 32
-      },
-      "activeHotspot": "duroplast"
-    },
-    {
-      "id": "chassis",
-      "badge": "04 / PODVOZEK DO PRACHU",
-      "title": "Nezávislé zavěšení a listová pera",
-      "subtitle": "Zdvih 75 mm a dynamický odklon kol",
-      "text": "Přední náhon s pohonem přímo na nápravu dává vozu skvělou trakci na prachu a kluzkém povrchu. Příčné listové pružiny s teleskopickými tlumiči pohlcují výmoly, přičemž kola plynule mění odklon z +2°30'/+4°30' až do záporných hodnot.",
-      "specs": [
-        { "k": "Pohon", "v": "Přední (FWD)" },
-        { "k": "Zdvih per", "v": "75 / 70 mm" },
-        { "k": "Brzdy", "v": "2okruhové Ø 200" }
-      ],
-      "camera": {
-        "pos": [-2.75, 0.44, 0.55],
-        "target": [-0.35, 0.36, -0.55],
-        "fov": 34
-      },
-      "activeHotspot": "chassis"
-    },
-    {
-      "id": "expedition",
-      "badge": "05 / EXPEDIČNÍ DĚLNÍK",
-      "title": "Oprava na krajnici za 10 minut",
-      "subtitle": "415 litrů kufru a mechanická jednoduchost",
-      "text": "K údržbě stačí klíč č. 10, č. 17 a šroubovák. Výměna motoru zabere ve dvou lidech půl hodiny, karburátor vyčistíte za pár minut u cesty a do 415litrového kufru sbalíte výbavu pro celou rodinu či expedici.",
-      "specs": [
-        { "k": "Kufr (sedan)", "v": "415 litrů" },
-        { "k": "Dojezd", "v": "~350 km (26 l)" },
-        { "k": "Max. rychlost", "v": "100 km/h" }
-      ],
-      "camera": {
-        "pos": [-3.05, 1.05, -4.65],
-        "target": [0.0, 0.58, -1.55],
-        "fov": 34
-      },
-      "activeHotspot": "exhaust"
-    },
-    {
-      "id": "continents",
-      "badge": "06 / PŘES KONTINENTY",
-      "title": "Z NDR na konec světa",
-      "subtitle": "Afrika, Jižní Amerika i Austrálie",
-      "text": "To, co vypadalo jako skromný lidový vůz, se v rukou dobrodruhů proměnilo v nezdolný expediční stroj. Slavné české žluté Trabanty projely Saharu, Andy, Pamír i australskou buš bez jediné elektronické řídicí jednotky.",
-      "specs": [
-        { "k": "Elektronika", "v": "0 řídicích jedn." },
-        { "k": "Vyrobeno", "v": "3 096 099 ks" },
-        { "k": "Režim", "v": "Přejdi na rozpad" }
-      ],
-      "camera": {
-        "pos": [4.95, 2.85, -5.05],
-        "target": [0.0, 0.62, -0.95],
-        "fov": 36
-      },
-      "activeHotspot": null
-    },
-    {
-      "id": "blueprint",
-      "badge": "07 / VIRTUÁLNÍ PAPÍR",
-      "title": "Technický řez vozidlem",
-      "subtitle": "Přechod ze silnice do konstrukčního výkresu",
-      "text": "Krajina západu slunce ustupuje čistému rýsovacímu papíru. Podívejte se na Trabant 601 shora jako konstruktér v Zwickau — před vámi je čtyřvrstvá architektura: podlahová plošina, ocelový skelet, 9 duroplastových panelů a pomocný rám s agregátem.",
-      "specs": [
-        { "k": "Konstrukce", "v": "4 moduly" },
-        { "k": "Dílů v modelu", "v": "430+ částí" },
-        { "k": "Katalog", "v": "ETK 1980" }
-      ],
-      "camera": {
-        "pos": [2.85, 4.95, 2.15],
-        "target": [0.0, 0.45, -1.02],
-        "fov": 38
-      },
-      "activeHotspot": null
-    },
-    {
-      "id": "exploded",
-      "badge": "08 / KOMPLETNÍ ROZPAD",
-      "title": "Od posledního šroubku",
-      "subtitle": "Interaktivní encyklopedie dílů ETK 1980",
-      "text": "Vůz se rozkládá na jednotlivé konstrukční celky: klenutou střechu, duroplastové panely, skla ESG, interiér K 29, dvoutakt P 65, převodovku G 50 S, listová pera i kola 4J×13. Klikněte na libovolný díl pro zobrazení jeho detailu, nebo použijte posuvník rozpadu dole.",
-      "specs": [
-        { "k": "Normálie", "v": "TGL (SW 10–19)" },
-        { "k": "Duroplast", "v": "9 výlisků" },
-        { "k": "Interakce", "v": "Klikni na díl" }
-      ],
-      "camera": {
-        "pos": [2.25, 6.45, 1.85],
-        "target": [0.0, 0.35, -1.02],
-        "fov": 40
-      },
-      "activeHotspot": null
-    }
-  ]
+    "project":  {
+                    "title":  "Trabant 601",
+                    "subtitle":  "Schopnosti a odolnost nezničitelného dvoutaktu",
+                    "era":  "1964–1990 • VEB Sachsenring Zwickau"
+                },
+    "trabant_import":  {
+                           "target_length_m":  3.555,
+                           "rotation_z_deg":  0,
+                           "wheel_radius_m":  0.2825,
+                           "road_tile_length_m":  32.0,
+                           "bake_road_ao":  true,
+                           "ao_samples":  32
+                       },
+    "scrollVideo":  {
+                        "enabled":  true,
+                        "defaultMode":  "hybrid",
+                        "frameCount":  180,
+                        "fps":  30,
+                        "preloadInitial":  18,
+                        "desktopPattern":  "assets/frames_desktop/frame_{pad4}.webp",
+                        "mobilePattern":  "assets/frames_mobile/frame_{pad4}.webp",
+                        "mobileMaxWidth":  768,
+                        "interactiveFromChapter":  6
+                    },
+    "paints":  [
+                   {
+                       "id":  "papyrus",
+                       "name":  "Papyrusweiss",
+                       "hex":  "#dfd7c3"
+                   },
+                   {
+                       "id":  "monsun",
+                       "name":  "Monsungelb (Expedice)",
+                       "hex":  "#e2a829"
+                   },
+                   {
+                       "id":  "gletscher",
+                       "name":  "Gletscherblau",
+                       "hex":  "#7ea8c2"
+                   },
+                   {
+                       "id":  "panama",
+                       "name":  "Panamagrün",
+                       "hex":  "#6c9969"
+                   }
+               ],
+    "assets":  {
+                   "trabantModel":  "assets/models/trabant.glb",
+                   "roadTileModel":  "assets/models/road_tile.glb",
+                   "manifest":  "assets/models/manifest.json",
+                   "hdri":  "assets/hdri/golden_hour.hdr",
+                   "lut":  "assets/luts/warm_golden.cube",
+                   "audio":  "assets/audio/ambient_wind.wav",
+                   "vfx":  {
+                               "smokePuff":  "assets/vfx/smoke_puff.png",
+                               "softMist":  "assets/vfx/soft_mist.png",
+                               "dustMote":  "assets/vfx/dust_mote.png",
+                               "lensFlare":  "assets/vfx/lens_flare.png"
+                           }
+               },
+    "lighting":  {
+                     "toneMappingExposure":  1.12,
+                     "environmentIntensity":  1.10,
+                     "backgroundBlurriness":  0.02,
+                     "backgroundIntensity":  0.96,
+                     "sun":  {
+                                 "color":  "#ffbe70",
+                                 "intensity":  4.4,
+                                 "position":  [
+                                                  28,
+                                                  5.2,
+                                                  14
+                                              ],
+                                 "shadowFrustum":  11,
+                                 "shadowBias":  -0.00025,
+                                 "shadowNormalBias":  0.016
+                             },
+                     "hemi":  {
+                                  "skyColor":  "#ffdcb0",
+                                  "groundColor":  "#281d14",
+                                  "intensity":  0.24
+                              },
+                     "fog":  {
+                                 "color":  "#c49e72",
+                                 "density":  0.017
+                             },
+                     "bloom":  {
+                                   "threshold":  1.08,
+                                   "strength":  0.22,
+                                   "radius":  0.36
+                               },
+                     "lut":  {
+                                 "enabled":  true,
+                                 "intensity":  0.42
+                             }
+                 },
+    "driving":  {
+                    "defaultSpeedKmh":  50,
+                    "speedPresetsKmh":  [
+                                            0,
+                                            30,
+                                            50,
+                                            80
+                                        ],
+                    "roadTileLength":  32.0,
+                    "roadTileCount":  3,
+                    "wheelRadius":  0.2825,
+                    "exhaustTip":  [
+                                       -0.46,
+                                       0.21,
+                                       -2.82
+                                   ],
+                    "rearWheels":  [
+                                       [
+                                           -0.6275,
+                                           0.08,
+                                           -2.02
+                                       ],
+                                       [
+                                           0.6275,
+                                           0.08,
+                                           -2.02
+                                       ]
+                                   ],
+                    "frontWheels":  [
+                                        [
+                                            -0.603,
+                                            0.08,
+                                            0.0
+                                        ],
+                                        [
+                                            0.603,
+                                            0.08,
+                                            0.0
+                                        ]
+                                    ]
+                },
+    "audio":  {
+                  "windVolume":  0.22,
+                  "engineVolume":  0.14
+              },
+    "hotspots":  [
+                     {
+                         "id":  "engine",
+                         "label":  "Vzduchem chlazený P 65",
+                         "short":  "Neuvaří se ani nezamrzne",
+                         "position":  [
+                                          0.15,
+                                          0.72,
+                                          0.12
+                                      ],
+                         "chapterIndex":  1
+                     },
+                     {
+                         "id":  "duroplast",
+                         "label":  "Pružný Duroplast",
+                         "short":  "Nereziví • odolá kamenům",
+                         "position":  [
+                                          0.76,
+                                          0.86,
+                                          -1.05
+                                      ],
+                         "chapterIndex":  2
+                     },
+                     {
+                         "id":  "chassis",
+                         "label":  "Listová pera \u0026 tlumiče",
+                         "short":  "Zdvih 75 mm • do každé koleje",
+                         "position":  [
+                                          -0.74,
+                                          0.34,
+                                          -0.02
+                                      ],
+                         "chapterIndex":  3
+                     },
+                     {
+                         "id":  "exhaust",
+                         "label":  "Expediční kufr 415 l \u0026 výfuk",
+                         "short":  "Opravitelný u krajnice",
+                         "position":  [
+                                          -0.15,
+                                          0.78,
+                                          -2.35
+                                      ],
+                         "chapterIndex":  4
+                     }
+                 ],
+    "chapters":  [
+                     {
+                         "id":  "intro",
+                         "badge":  "01 / STVOŘEN DO NEČASŮ",
+                         "title":  "615 kilo čisté odvahy",
+                         "subtitle":  "Kde těžké vozy zapadnou, Trabant projede",
+                         "text":  "Díky muší váze 615 kg a ploché zakryté podlaze dokáže Trabant 601 přejet hluboké polní koleje, bláto i sníh bez zaboření. A když přece jen uvízne, dva dospělí lidé jej z příkopu zvednou holýma rukama.",
+                         "specs":  [
+                                       {
+                                           "k":  "Hmotnost",
+                                           "v":  "615 kg"
+                                       },
+                                       {
+                                           "k":  "Světlá výška",
+                                           "v":  "155 mm"
+                                       },
+                                       {
+                                           "k":  "Poloměr otáčení",
+                                           "v":  "9,3 m"
+                                       }
+                                   ],
+                         "camera":  {
+                                        "pos":  [
+                                                    -2.42,
+                                                    0.46,
+                                                    2.95
+                                                ],
+                                        "target":  [
+                                                       -0.08,
+                                                       0.56,
+                                                       -0.85
+                                                   ],
+                                        "fov":  32
+                                    },
+                         "activeHotspot":  null
+                     },
+                     {
+                         "id":  "engine",
+                         "badge":  "02 / DVOUTAKT BEZ KOMPROMISŮ",
+                         "title":  "Nezamrzne a neuvaří se",
+                         "subtitle":  "Vzduchem chlazený dvouválec 594,5 cm³",
+                         "text":  "Motor P 65 nemá chladič, vodní pumpu, ventily ani olejové čerpadlo — tedy žádné díly, které by v mrazu praskly nebo v poušti vyvřely. Palivo teče ze spádové 26l nádrže samospádem a maže motor směsí 1:50.",
+                         "specs":  [
+                                       {
+                                           "k":  "Výkon",
+                                           "v":  "19,1 kW (26 k)"
+                                       },
+                                       {
+                                           "k":  "Chlazení",
+                                           "v":  "Vzduchem (ventilátor)"
+                                       },
+                                       {
+                                           "k":  "Spolehlivost",
+                                           "v":  "-30 °C až +50 °C"
+                                       }
+                                   ],
+                         "camera":  {
+                                        "pos":  [
+                                                    0.95,
+                                                    2.38,
+                                                    1.55
+                                                ],
+                                        "target":  [
+                                                       0.05,
+                                                       0.44,
+                                                       0.05
+                                                   ],
+                                        "fov":  34
+                                    },
+                         "activeHotspot":  "engine"
+                     },
+                     {
+                         "id":  "duroplast",
+                         "badge":  "03 / NEZNIČITELNÝ DUROPLAST",
+                         "title":  "Karoserie, která nezná rez",
+                         "subtitle":  "Tepelně lisovaná pryskyřice a bavlna",
+                         "text":  "Devět vnějších panelů z duroplastu na ocelovém skeletu odolává posypové soli, vlhku i odletujícím kamenům na šotolině. Materiál je pružný — při lehkém nárazu se prohne a vrátí zpět, aniž by popraskal jako plech.",
+                         "specs":  [
+                                       {
+                                           "k":  "Panely",
+                                           "v":  "9× Duroplast"
+                                       },
+                                       {
+                                           "k":  "Tloušťka",
+                                           "v":  "2,5 mm"
+                                       },
+                                       {
+                                           "k":  "Koroze povrchu",
+                                           "v":  "0 %"
+                                       }
+                                   ],
+                         "camera":  {
+                                        "pos":  [
+                                                    4.35,
+                                                    1.08,
+                                                    -1.05
+                                                ],
+                                        "target":  [
+                                                       0.0,
+                                                       0.68,
+                                                       -1.02
+                                                   ],
+                                        "fov":  32
+                                    },
+                         "activeHotspot":  "duroplast"
+                     },
+                     {
+                         "id":  "chassis",
+                         "badge":  "04 / PODVOZEK DO PRACHU",
+                         "title":  "Nezávislé zavěšení a listová pera",
+                         "subtitle":  "Zdvih 75 mm a dynamický odklon kol",
+                         "text":  "Přední náhon s pohonem přímo na nápravu dává vozu skvělou trakci na prachu a kluzkém povrchu. Příčné listové pružiny s teleskopickými tlumiči pohlcují výmoly, přičemž kola plynule mění odklon z +2°30\u0027/+4°30\u0027 až do záporných hodnot.",
+                         "specs":  [
+                                       {
+                                           "k":  "Pohon",
+                                           "v":  "Přední (FWD)"
+                                       },
+                                       {
+                                           "k":  "Zdvih per",
+                                           "v":  "75 / 70 mm"
+                                       },
+                                       {
+                                           "k":  "Brzdy",
+                                           "v":  "2okruhové Ø 200"
+                                       }
+                                   ],
+                         "camera":  {
+                                        "pos":  [
+                                                    -2.75,
+                                                    0.44,
+                                                    0.55
+                                                ],
+                                        "target":  [
+                                                       -0.35,
+                                                       0.36,
+                                                       -0.55
+                                                   ],
+                                        "fov":  34
+                                    },
+                         "activeHotspot":  "chassis"
+                     },
+                     {
+                         "id":  "expedition",
+                         "badge":  "05 / EXPEDIČNÍ DĚLNÍK",
+                         "title":  "Oprava na krajnici za 10 minut",
+                         "subtitle":  "415 litrů kufru a mechanická jednoduchost",
+                         "text":  "K údržbě stačí klíč č. 10, č. 17 a šroubovák. Výměna motoru zabere ve dvou lidech půl hodiny, karburátor vyčistíte za pár minut u cesty a do 415litrového kufru sbalíte výbavu pro celou rodinu či expedici.",
+                         "specs":  [
+                                       {
+                                           "k":  "Kufr (sedan)",
+                                           "v":  "415 litrů"
+                                       },
+                                       {
+                                           "k":  "Dojezd",
+                                           "v":  "~350 km (26 l)"
+                                       },
+                                       {
+                                           "k":  "Max. rychlost",
+                                           "v":  "100 km/h"
+                                       }
+                                   ],
+                         "camera":  {
+                                        "pos":  [
+                                                    -3.05,
+                                                    1.05,
+                                                    -4.65
+                                                ],
+                                        "target":  [
+                                                       0.0,
+                                                       0.58,
+                                                       -1.55
+                                                   ],
+                                        "fov":  34
+                                    },
+                         "activeHotspot":  "exhaust"
+                     },
+                     {
+                         "id":  "continents",
+                         "badge":  "06 / PŘES KONTINENTY",
+                         "title":  "Z NDR na konec světa",
+                         "subtitle":  "Afrika, Jižní Amerika i Austrálie",
+                         "text":  "To, co vypadalo jako skromný lidový vůz, se v rukou dobrodruhů proměnilo v nezdolný expediční stroj. Slavné české žluté Trabanty projely Saharu, Andy, Pamír i australskou buš bez jediné elektronické řídicí jednotky.",
+                         "specs":  [
+                                       {
+                                           "k":  "Elektronika",
+                                           "v":  "0 řídicích jedn."
+                                       },
+                                       {
+                                           "k":  "Vyrobeno",
+                                           "v":  "3 096 099 ks"
+                                       },
+                                       {
+                                           "k":  "Režim",
+                                           "v":  "Přejdi na rozpad"
+                                       }
+                                   ],
+                         "camera":  {
+                                        "pos":  [
+                                                    4.95,
+                                                    2.85,
+                                                    -5.05
+                                                ],
+                                        "target":  [
+                                                       0.0,
+                                                       0.62,
+                                                       -0.95
+                                                   ],
+                                        "fov":  36
+                                    },
+                         "activeHotspot":  null
+                     },
+                     {
+                         "id":  "blueprint",
+                         "badge":  "07 / VIRTUÁLNÍ PAPÍR",
+                         "title":  "Technický řez vozidlem",
+                         "subtitle":  "Přechod ze silnice do konstrukčního výkresu",
+                         "text":  "Krajina západu slunce ustupuje čistému rýsovacímu papíru. Podívejte se na Trabant 601 shora jako konstruktér v Zwickau — před vámi je čtyřvrstvá architektura: podlahová plošina, ocelový skelet, 9 duroplastových panelů a pomocný rám s agregátem.",
+                         "specs":  [
+                                       {
+                                           "k":  "Konstrukce",
+                                           "v":  "4 moduly"
+                                       },
+                                       {
+                                           "k":  "Dílů v modelu",
+                                           "v":  "430+ částí"
+                                       },
+                                       {
+                                           "k":  "Katalog",
+                                           "v":  "ETK 1980"
+                                       }
+                                   ],
+                         "camera":  {
+                                        "pos":  [
+                                                    2.85,
+                                                    4.95,
+                                                    2.15
+                                                ],
+                                        "target":  [
+                                                       0.0,
+                                                       0.45,
+                                                       -1.02
+                                                   ],
+                                        "fov":  38
+                                    },
+                         "activeHotspot":  null
+                     },
+                     {
+                         "id":  "exploded",
+                         "badge":  "08 / KOMPLETNÍ ROZPAD",
+                         "title":  "Od posledního šroubku",
+                         "subtitle":  "Interaktivní encyklopedie dílů ETK 1980",
+                         "text":  "Vůz se rozkládá na jednotlivé konstrukční celky: klenutou střechu, duroplastové panely, skla ESG, interiér K 29, dvoutakt P 65, převodovku G 50 S, listová pera i kola 4J×13. Klikněte na libovolný díl pro zobrazení jeho detailu, nebo použijte posuvník rozpadu dole.",
+                         "specs":  [
+                                       {
+                                           "k":  "Normálie",
+                                           "v":  "TGL (SW 10–19)"
+                                       },
+                                       {
+                                           "k":  "Duroplast",
+                                           "v":  "9 výlisků"
+                                       },
+                                       {
+                                           "k":  "Interakce",
+                                           "v":  "Klikni na díl"
+                                       }
+                                   ],
+                         "camera":  {
+                                        "pos":  [
+                                                    2.25,
+                                                    6.45,
+                                                    1.85
+                                                ],
+                                        "target":  [
+                                                       0.0,
+                                                       0.35,
+                                                       -1.02
+                                                   ],
+                                        "fov":  40
+                                    },
+                         "activeHotspot":  null
+                     }
+                 ]
 }

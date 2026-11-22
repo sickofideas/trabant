@@ -34,9 +34,10 @@
     </div>
   </div>
 
-  <!-- Fixni 3D WebGL platno -->
+  <!-- Fixni 3D WebGL platno + filmova WebP sekvence (Hybrid) -->
   <div id="canvas-wrap" class="canvas-wrap">
     <canvas id="webgl-canvas"></canvas>
+    <canvas id="sequence-canvas" class="sequence-canvas is-hidden" aria-label="Filmový průlet Cycles / WebP sekvence"></canvas>
   </div>
 
   <!-- 3D Hotspot popisky nad Trabantem -->
@@ -65,6 +66,11 @@
         <button class="speed-btn" data-speed="80" title="Plný plyn 80 km/h">80</button>
         <span class="speed-unit">km/h</span>
       </div>
+
+      <button id="btn-view-mode" class="hud-btn hud-btn-mode" type="button" aria-pressed="false" title="Přepnout mezi filmovým WebP scroll-videem (Cycles) a interaktivním 3D (Three.js) — klávesa V">
+        <span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h5M17 9h5M2 15h5M17 15h5"/></svg></span>
+        <span id="view-mode-label">3D Dílna</span>
+      </button>
 
       <button id="btn-terrain" class="hud-btn" type="button" aria-pressed="false" title="Přepnout mezi hladkou okreskou a rozbitou polňačkou (listová pera v akci)">
         <span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15c3-4 6 4 9 0s6 4 11 0"/></svg></span>
@@ -178,6 +184,7 @@
       Roluj kolečkem myši nebo použij šipky ↑/↓ • Klikni na díl pro detail
     </div>
     <div class="hud-bottom-right">
+      <div id="film-status-pill" class="film-status-pill is-hidden" aria-live="polite"></div>
       <div id="placeholder-pill" class="placeholder-pill is-hidden">
         Siluetový placeholder • vlastní model vlož do <code>assets_raw/</code>
       </div>

@@ -1333,6 +1333,9 @@ export class TrabantScene {
           });
 
           this.paintMaterials = Array.from(paintMatSet);
+          if (this.currentPaintId && this.currentPaintId !== 'papyrus') {
+            this.setPaintColor(this.currentPaintId);
+          }
           this.bodyNode = bodyObj || model;
           this.trabantGroup.add(model);
 
@@ -1348,6 +1351,9 @@ export class TrabantScene {
             this.expeditionGroup.visible = this.expeditionEnabled;
           } else {
             this._buildExpeditionPack(this.bodyNode);
+            if (this.expeditionGroup) {
+              this.expeditionGroup.visible = this.expeditionEnabled;
+            }
           }
           this._buildExplodeGuideLines(this.bodyNode);
 

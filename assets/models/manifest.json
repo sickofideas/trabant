@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-22 00:26:38",
+  "generated_at": "2026-11-22 00:42:21",
   "blender_version": "5.3.0",
   "cycles_backend": "GPU/OPTIX (NVIDIA GeForce RTX 4080)",
   "total_glb_mb": 6.451,
@@ -8,7 +8,7 @@
   "models": {
     "trabant": {
       "file": "trabant.glb",
-      "size_bytes": 1481220,
+      "size_bytes": 1481156,
       "size_mb": 1.413,
       "objects": 92,
       "base_polygons": 42635,
@@ -16,7 +16,7 @@
     },
     "road_tile": {
       "file": "road_tile.glb",
-      "size_bytes": 5282244,
+      "size_bytes": 5282496,
       "size_mb": 5.038,
       "objects": 121,
       "base_polygons": 191826,
